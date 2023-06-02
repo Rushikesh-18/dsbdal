@@ -1,0 +1,165 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+dataset = pd.read_csv('StudentsPerformance.csv')
+dataset
+dataset.isnull()
+dataset.notnull()
+dataset.isnull().sum()
+dataset.isnull().sum().sum()
+dataset_2 = dataset.fillna(value = 0)
+dataset_2
+dataset_3 = dataset.fillna({
+    'Math_Score' :             'MATH',
+    'Reading_Score'  :        'READ',
+    'Writing_Score'  :          'WRITE',
+    'Placement_Score'  :        'PLACEMENT',
+    'Club_Join_Date'    :       'CLUB',
+    'Placement_Offer_Count'  :  'OFFER'
+})
+dataset_3
+dataset_4 = dataset.fillna(value = dataset['Writing_Score'].min())
+dataset_4
+dataset_5 = dataset.dropna()
+dataset_5
+dataset_6 = dataset.replace(to_replace=np.nan,value=88888)
+dataset_6
+col = ['Math_Score','Reading_Score','Writing_Score','Placement_Score','Club_Join_Date','Placement_Offer_Count']
+dataset_7 = dataset
+dataset_7.boxplot(col)
+print(np.where(dataset_7['Math_Score']>90))
+print(np.where(dataset_7['Reading_Score']>90))
+print(np.where(dataset_7['Writing_Score']>9))
+dataset_8 = dataset
+fig , ax = plt.subplots(figsize = (18,10))
+ax.scatter(dataset_8['Placement_Score'],dataset_8['Placement_Offer_Count'])
+plt.show()
+print(np.where( (dataset_8['Placement_Score']<50) & (dataset_8['Placement_Offer_Count']>1)))
+print(np.where( (dataset_8['Placement_Score']<85) & (dataset_8['Placement_Offer_Count']>3)))
+z = np.abs(stats.zscore(dataset_8['Math_Score']))
+print(z)
+threshold = 0.18
+sample = np.where(z<threshold)
+sample
+sorted_dataset_8 = sorted(dataset_8['Math_Score'])
+sorted_dataset_8
+
+Q1 = np.percentile(sorted_dataset_8,25)
+Q3 = np.percentile(sorted_dataset_8,75)
+print(Q1,Q3)
+IQR = Q3-Q1
+upper = Q1-(1.5*IQR)
+lower = Q3+(1.5*IQR)
+print(lower,upper)
+
+out = []
+for i in sorted_dataset_8:
+    if(i<lower or i>upper):
+        out.append(i)
+print(out)
+dataset
+
+dataset_9 = dataset
+sample_outliers=[0,1,2,3]
+for i in sample_outliers:
+    dataset_9.drop(i,inplace=True)
+dataset_9
+dataset_9 = dataset
+array = np.percentile(dataset_9['Math_Score'],90)
+b = np.where(dataset_9['Math_Score']>array,array,dataset_9['Math_Score'])
+print(b)
+dataset_9.insert(1,"m score",b,True)
+dataset_9
+
+
+
+/*
+Sure! Here's the meaning of each line of code:
+
+1. `#!/usr/bin/env python` and `# coding: utf-8`: These are shebang and encoding statements, respectively, and they specify the interpreter to be used and the character encoding of the script.
+
+2. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+3. `import numpy as np`: This line imports the NumPy library and assigns it the alias 'np'.
+
+4. `import matplotlib.pyplot as plt`: This line imports the pyplot module from the Matplotlib library and assigns it the alias 'plt'.
+
+5. `from scipy import stats`: This line imports the stats module from the SciPy library.
+
+6. `dataset = pd.read_csv('StudentsPerformance.csv')`: This line reads a CSV file called 'StudentsPerformance.csv' and creates a DataFrame called `dataset` to store the data.
+
+7. `dataset`: This line displays the content of the `dataset` DataFrame.
+
+8. `dataset.isnull()`: This line checks for missing values in the `dataset` DataFrame and returns a DataFrame of the same shape, where each cell contains True if the corresponding value is null and False otherwise.
+
+9. `dataset.notnull()`: This line checks for non-null values in the `dataset` DataFrame and returns a DataFrame of the same shape, where each cell contains True if the corresponding value is not null and False otherwise.
+
+10. `dataset.isnull().sum()`: This line calculates the sum of null values for each column in the `dataset` DataFrame.
+
+11. `dataset.isnull().sum().sum()`: This line calculates the total number of null values in the `dataset` DataFrame.
+
+12. `dataset_2 = dataset.fillna(value = 0)`: This line fills the null values in the `dataset` DataFrame with the value 0 and creates a new DataFrame called `dataset_2`.
+
+13. `dataset_2`: This line displays the content of the `dataset_2` DataFrame.
+
+14. `dataset_3 = dataset.fillna({...})`: This line fills specific columns' null values in the `dataset` DataFrame with designated values using a dictionary. The specified columns and their corresponding fill values are provided.
+
+15. `dataset_3`: This line displays the content of the `dataset_3` DataFrame.
+
+16. `dataset_4 = dataset.fillna(value = dataset['Writing_Score'].min())`: This line fills the null values in the `dataset` DataFrame with the minimum value of the 'Writing_Score' column and creates a new DataFrame called `dataset_4`.
+
+17. `dataset_4`: This line displays the content of the `dataset_4` DataFrame.
+
+18. `dataset_5 = dataset.dropna()`: This line removes any rows containing null values from the `dataset` DataFrame and creates a new DataFrame called `dataset_5`.
+
+19. `dataset_5`: This line displays the content of the `dataset_5` DataFrame.
+
+20. `dataset_6 = dataset.replace(to_replace=np.nan,value=88888)`: This line replaces all null values in the `dataset` DataFrame with the value 88888 and creates a new DataFrame called `dataset_6`.
+
+21. `dataset_6`: This line displays the content of the `dataset_6` DataFrame.
+
+22. `col = ['Math_Score','Reading_Score','Writing_Score','Placement_Score','Club_Join_Date','Placement_Offer_Count']`: This line defines a list called `col` containing the column names to be used for creating boxplots.
+
+23. `dataset_7 = dataset`: This line creates a new DataFrame called `dataset_7` that is a copy of
+
+ the `dataset` DataFrame.
+
+24. `dataset_7.boxplot(col)`: This line creates boxplots for the columns specified in the `col` list, visualizing the distribution of values in each column.
+
+25. `print(np.where(dataset_7['Math_Score']>90))`: This line prints the indices where the values in the 'Math_Score' column of the `dataset_7` DataFrame are greater than 90.
+
+26. `print(np.where(dataset_7['Reading_Score']>90))`: This line prints the indices where the values in the 'Reading_Score' column of the `dataset_7` DataFrame are greater than 90.
+
+27. `print(np.where(dataset_7['Writing_Score']>9))`: This line prints the indices where the values in the 'Writing_Score' column of the `dataset_7` DataFrame are greater than 9.
+
+28. `dataset_8 = dataset`: This line creates a new DataFrame called `dataset_8` that is a copy of the `dataset` DataFrame.
+
+29. `fig , ax = plt.subplots(figsize = (18,10))`: This line creates a new figure and axes with a specified size for the scatter plot.
+
+30. `ax.scatter(dataset_8['Placement_Score'],dataset_8['Placement_Offer_Count'])`: This line creates a scatter plot using the 'Placement_Score' column as the x-axis values and the 'Placement_Offer_Count' column as the y-axis values.
+
+31. `plt.show()`: This line displays the scatter plot.
+
+32. `print(np.where( (dataset_8['Placement_Score']<50) & (dataset_8['Placement_Offer_Count']>1)))`: This line prints the indices where the values in the 'Placement_Score' column of the `dataset_8` DataFrame are less than 50 and the values in the 'Placement_Offer_Count' column are greater than 1.
+
+33. `print(np.where( (dataset_8['Placement_Score']<85) & (dataset_8['Placement_Offer_Count']>3)))`: This line prints the indices where the values in the 'Placement_Score' column of the `dataset_8` DataFrame are less than 85 and the values in the 'Placement_Offer_Count' column are greater than 3.
+
+34. `z = np.abs(stats.zscore(dataset_8['Math_Score']))`: This line calculates the z-scores for the values in the 'Math_Score' column of the `dataset_8` DataFrame using the `zscore` function from the SciPy library.
+
+35. `print(z)`: This line prints the z-scores.
+
+36. `threshold = 0.18`: This line assigns a threshold value of 0.18.
+
+37. `sample = np.where(z<threshold)`: This line finds the indices where the z-scores in the `z` array are less than the specified threshold and assigns them to the `sample` variable.
+
+38. `sample`: This line prints the indices where the z-scores are below the threshold.
+
+39. `sorted_dataset_8 = sorted(dataset_8['Math_Score'])`: This line sorts the values in the 'Math_Score' column of the `dataset_8` DataFrame in ascending order and assigns the sorted values to the `sorted_dataset_8` variable.
+
+40. `sorted_dataset_8`: This line displays the sorted values.
+
+41. `Q1 = np.percentile(sorted_dataset_8,25)`: This line calculates the first quartile (25th percentile) of the values in the `sorted_dataset_8` array using the `percentile` function from the NumPy library and assigns it
+
+*/

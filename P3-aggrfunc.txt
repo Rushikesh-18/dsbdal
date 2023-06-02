@@ -1,0 +1,85 @@
+import pandas as pd
+df1 = pd.read_csv("income.csv")
+df1
+df1.age_group.unique()
+
+df1.groupby(df1.age_group).count()
+
+df1.groupby(df1.age_group).min()
+
+df1.groupby(df1.age_group).max()
+
+df1.groupby(df1.age_group).mean()
+
+df1.groupby(df1.age_group).std()
+
+df1.groupby(df1.age_group).describe()
+
+from sklearn import datasets 
+data = datasets.load_iris() 
+df = pd.DataFrame(data.data,columns=data.feature_names) 
+df['species'] = pd.Series(data.target) 
+df
+
+df.species.unique()
+
+df.groupby(df.species)
+
+df.groupby(df.species).count()
+
+df.groupby(df.species).max()
+
+df.groupby(df.species).min()
+
+df.groupby(df.species)["sepal length (cm)"].describe()
+
+/*
+Sure! Here's the explanation for each line of code:
+
+1. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+2. `df1 = pd.read_csv("income.csv")`: This line reads a CSV file called "income.csv" and creates a DataFrame called `df1` to store the data.
+
+3. `df1`: This line displays the content of the `df1` DataFrame.
+
+4. `df1.age_group.unique()`: This line returns an array of unique values in the 'age_group' column of the `df1` DataFrame.
+
+5. `df1.groupby(df1.age_group).count()`: This line groups the DataFrame `df1` by the 'age_group' column and calculates the count of records in each group.
+
+6. `df1.groupby(df1.age_group).min()`: This line groups the DataFrame `df1` by the 'age_group' column and calculates the minimum value in each group.
+
+7. `df1.groupby(df1.age_group).max()`: This line groups the DataFrame `df1` by the 'age_group' column and calculates the maximum value in each group.
+
+8. `df1.groupby(df1.age_group).mean()`: This line groups the DataFrame `df1` by the 'age_group' column and calculates the mean value in each group.
+
+9. `df1.groupby(df1.age_group).std()`: This line groups the DataFrame `df1` by the 'age_group' column and calculates the standard deviation in each group.
+
+10. `df1.groupby(df1.age_group).describe()`: This line groups the DataFrame `df1` by the 'age_group' column and provides descriptive statistics (count, mean, std, min, quartiles, max) for each group.
+
+11. `from sklearn import datasets`: This line imports the datasets module from the scikit-learn library.
+
+12. `data = datasets.load_iris()`: This line loads the iris dataset from scikit-learn and assigns it to the `data` variable.
+
+13. `df = pd.DataFrame(data.data,columns=data.feature_names)`: This line creates a DataFrame called `df` using the feature data from the iris dataset and assigns column names using the feature names from the dataset.
+
+14. `df['species'] = pd.Series(data.target)`: This line adds a new column called 'species' to the `df` DataFrame and assigns the target variable from the iris dataset to it.
+
+15. `df`: This line displays the content of the `df` DataFrame.
+
+16. `df.species.unique()`: This line returns an array of unique values in the 'species' column of the `df` DataFrame.
+
+17. `df.groupby(df.species)`: This line groups the DataFrame `df` by the 'species' column.
+
+18. `df.groupby(df.species).count()`: This line groups the DataFrame `df` by the 'species' column and calculates the count of records in each group.
+
+19. `df.groupby(df.species).max()`: This line groups the DataFrame `df` by the 'species' column and calculates the maximum value in each group.
+
+20. `df.groupby(df.species).min()`: This line groups the DataFrame `df` by the 'species' column and calculates the minimum value in each group.
+
+21. `df.groupby(df.species)["sepal length (cm)"].describe()`: This line groups the DataFrame `df` by the 'species' column and provides descriptive statistics (count, mean, std, min, quartiles, max) for the 'sepal length (cm)' column within each group.
+
+Note: The aggregate functions used in the code (count, min, max
+
+, mean, std) are built-in functions in Pandas that operate on groups of data. The formulas for calculating these functions are predefined and do not require explicit formulas.
+
+*/

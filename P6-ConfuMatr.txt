@@ -1,0 +1,107 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('iris.csv')
+X=dataset.iloc[:,:4].values 
+y = dataset['species'].values 
+print(dataset.head(5))
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler() 
+X_train = sc.fit_transform(X_train) 
+X_test = sc.transform(X_test)
+
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB() 
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+
+from sklearn.metrics import confusion_matrix 
+cm = confusion_matrix(y_test, y_pred) 
+
+from sklearn.metrics import accuracy_score 
+print("Accuracy : ", accuracy_score(y_test,y_pred)) 
+print(cm)
+
+df = pd.DataFrame({'Real Values':y_test, 'Predicted Values':y_pred})
+print(df)
+
+from sklearn.metrics import precision_score, recall_score, accuracy_score
+
+m=accuracy_score(y_test, y_pred) 
+print("error rate:-",1-m) 
+
+print('Precision:',precision_score(y_test,y_pred,average='micro'))
+
+print("Recall Score:",recall_score(y_test,y_pred,average='micro'))
+
+/*
+Sure! Here's an explanation for each line of code:
+
+1. `import numpy as np`: This line imports the NumPy library and assigns it the alias 'np'.
+
+2. `import matplotlib.pyplot as plt`: This line imports the pyplot module from the matplotlib library and assigns it the alias 'plt'.
+
+3. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+4. `dataset = pd.read_csv('iris.csv')`: This line reads a CSV file called 'iris.csv' and creates a DataFrame called `dataset` to store the data.
+
+5. `X=dataset.iloc[:,:4].values`: This line extracts the feature columns from the `dataset` DataFrame and assigns them to the variable `X`.
+
+6. `y = dataset['species'].values`: This line extracts the target column ('species') from the `dataset` DataFrame and assigns it to the variable `y`.
+
+7. `print(dataset.head(5))`: This line prints the first 5 rows of the `dataset` DataFrame.
+
+8. `from sklearn.model_selection import train_test_split`: This line imports the train_test_split function from the model_selection module in scikit-learn.
+
+9. `X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)`: This line splits the data into training and testing sets, where 80% of the data is used for training (`X_train` and `y_train`) and 20% is used for testing (`X_test` and `y_test`).
+
+10. `from sklearn.preprocessing import StandardScaler`: This line imports the StandardScaler class from scikit-learn for feature scaling.
+
+11. `sc = StandardScaler()`: This line creates an instance of the StandardScaler class.
+
+12. `X_train = sc.fit_transform(X_train)`: This line scales the training feature data using the fit_transform method of the StandardScaler class.
+
+13. `X_test = sc.transform(X_test)`: This line scales the testing feature data using the transform method of the StandardScaler class.
+
+14. `from sklearn.naive_bayes import GaussianNB`: This line imports the GaussianNB class from scikit-learn for Naive Bayes classification.
+
+15. `classifier = GaussianNB()`: This line creates an instance of the GaussianNB classifier.
+
+16. `classifier.fit(X_train, y_train)`: This line fits the Naive Bayes classifier to the training data.
+
+17. `y_pred = classifier.predict(X_test)`: This line uses the trained classifier to make predictions on the testing data.
+
+18. `from sklearn.metrics import confusion_matrix`: This line imports the confusion_matrix function from scikit-learn.
+
+19. `cm = confusion_matrix(y_test, y_pred)`: This line calculates the confusion matrix based on the actual test labels (`y_test`) and the predicted labels (`y_pred`).
+
+20. `from sklearn.metrics import accuracy_score`: This line imports the accuracy_score function from scikit-learn.
+
+21. `print("Accuracy : ", accuracy_score(y_test,y_pred))`: This line calculates and prints the accuracy of the classifier on the testing data.
+
+22. `print(cm)`: This line prints the confusion matrix.
+
+23. `df = pd.DataFrame({'Real Values':y_test, 'Predicted Values':y_pred})`: This line creates a DataFrame called `df` to store the real and predicted values.
+
+24. `print(df)`: This line prints the `df` DataFrame.
+
+25. `from sklearn.metrics import precision_score, recall_score, accuracy_score`: This line imports the precision_score, recall_score, and accuracy_score functions from scikit-learn.
+
+26. `m=accuracy_score
+
+(y_test, y_pred)`: This line calculates the accuracy of the classifier on the testing data and assigns it to the variable `m`.
+
+27. `print("error rate:-",1-m)`: This line calculates and prints the error rate of the classifier.
+
+28. `print('Precision:',precision_score(y_test,y_pred,average='micro'))`: This line calculates and prints the precision score of the classifier.
+
+29. `print("Recall Score:",recall_score(y_test,y_pred,average='micro'))`: This line calculates and prints the recall score of the classifier.
+
+I hope this helps! Let me know if you have any further questions.
+*/

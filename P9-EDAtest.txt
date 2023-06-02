@@ -1,0 +1,49 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('test.csv')
+df
+
+cols = df.columns
+cols
+
+
+print(df.info())
+print(df.describe())
+print(df.isnull().sum())
+
+sns.boxplot(x='Sex', y='Age', hue='Survived', data=df)
+
+sns.boxplot(x='Sex', y='Age', data=df)
+
+/*
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`.
+
+2. `import numpy as np`: This line imports the numpy library and assigns it the alias `np`.
+
+3. `import seaborn as sns`: This line imports the seaborn library and assigns it the alias `sns`.
+
+4. `import matplotlib.pyplot as plt`: This line imports the pyplot module from the matplotlib library and assigns it the alias `plt`.
+
+5. `df = pd.read_csv('test.csv')`: This line reads the 'test.csv' file using the `read_csv` function from pandas and assigns the resulting DataFrame to the variable `df`.
+
+6. `df`: This line displays the contents of the DataFrame `df`, showing the data from the 'test.csv' file.
+
+7. `cols = df.columns`: This line assigns the column names of the DataFrame `df` to the variable `cols`.
+
+8. `cols`: This line displays the column names of the DataFrame `df`.
+
+9. `print(df.info())`: This line prints the concise summary of the DataFrame `df`, including information about the column names, data types, and non-null values.
+
+10. `print(df.describe())`: This line prints the statistical summary of the DataFrame `df`, including count, mean, standard deviation, minimum, 25th percentile, median, 75th percentile, and maximum values for each numerical column.
+
+11. `print(df.isnull().sum())`: This line prints the sum of null values in each column of the DataFrame `df`, indicating how many missing values are present in each column.
+
+12. `sns.boxplot(x='Sex', y='Age', hue='Survived', data=df)`: This line creates a boxplot using the `boxplot` function from seaborn. It shows the distribution of ages (`Age`) for different genders (`Sex`) and different survival outcomes (`Survived`). The `hue` parameter is used to differentiate the boxes based on the survival status.
+
+13. `sns.boxplot(x='Sex', y='Age', data=df)`: This line creates a boxplot using the `boxplot` function from seaborn. It shows the distribution of ages (`Age`) for different genders (`Sex`). It does not consider the survival status.
+
+Note: The meaning of the lines is provided based on their functionality, but without the actual data, it's not possible to provide specific interpretations or insights into the plots.
+*/

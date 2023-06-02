@@ -1,0 +1,494 @@
+get_ipython().system('pip install nltk')
+
+
+#Loading NLTK
+import nltk
+
+nltk.download('punkt')
+
+
+from nltk.tokenize import sent_tokenize
+text="""Hello Mr. Smith, how are you doing today? The weather is 
+great, and city is awesome. The sky is pinkish-blue. You shouldn't 
+eat cardboard"""
+tokenized_text=sent_tokenize(text)
+print(tokenized_text)
+
+
+from nltk.tokenize import word_tokenize
+tokenized_word=word_tokenize(text)
+ 
+print(tokenized_word)
+
+
+
+from nltk.probability import FreqDist
+fdist = FreqDist(tokenized_word)
+print(fdist)
+
+
+# In[9]:
+
+
+fdist.most_common(2)
+
+
+
+
+#Frequency Distribution Plot
+#pip install matplotlib
+
+import matplotlib.pyplot as plt
+fdist.plot(30,cumulative=False)
+plt.show()
+
+
+
+
+sent = "Albert Einstein was born in Ulm, Germany in 1879."
+tokens=nltk.word_tokenize(sent)
+print(tokens)
+
+
+
+nltk.download('averaged_perceptron_tagger') 
+nltk.pos_tag(tokens)
+
+
+
+
+
+import nltk
+nltk.download('stopwords')
+
+
+from nltk.corpus import stopwords 
+stop_words = set(stopwords.words("english")) 
+print(stop_words)
+
+
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+example_sent = "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard"
+
+stop_words = set(stopwords.words('english'))
+
+word_tokens = word_tokenize(example_sent)
+
+filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]
+
+filtered_sentence = []
+
+for w in word_tokens:
+	if w not in stop_words:
+		filtered_sentence.append(w)
+
+print(word_tokens)
+print(filtered_sentence)
+
+
+
+# In[67]:
+
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+text="Hello Mr. Smith, how are you doing today?"
+
+stop_words = set(stopwords.words("english")) 
+
+tokenized_text=word_tokenize(text)
+
+filtered_sent=[]
+
+for w in tokenized_text:
+    if w not in stop_words:
+        filtered_sent.append(w)
+
+print("Tokenized Sentence:",tokenized_text)
+print("Filterd Sentence  :",filtered_sent)
+
+
+removed_words = []
+for w in tokenized_text:
+    if w in stop_words:
+        removed_words.append(w)
+
+print("Filterd Sentence  :",removed_words)
+
+
+
+# Stemming
+from nltk.stem import PorterStemmer
+from nltk.tokenize import sent_tokenize, word_tokenize
+ps = PorterStemmer()
+stemmed_words=[]
+for w in filtered_sent:
+     stemmed_words.append(ps.stem(w))
+print("Filtered Sentence:",filtered_sent)
+print("Stemmed Sentence:",stemmed_words)
+
+
+# In[2]:
+
+
+import nltk
+nltk.download('wordnet')
+
+
+# In[4]:
+
+
+import nltk
+nltk.download('omw-1.4')
+
+
+# In[5]:
+
+
+#Lexicon Normalization
+#performing stemming and Lemmatization
+
+from nltk.stem.wordnet import WordNetLemmatizer
+lem = WordNetLemmatizer()
+from nltk.stem.porter import PorterStemmer
+stem = PorterStemmer()
+word = "flying" 
+print("Lemmatized Word:",lem.lemmatize(word,"v"))
+print("Stemmed Word:",stem.stem(word))
+
+
+# In[10]:
+
+
+import pandas as pd
+import sklearn as sk
+import math
+
+first_sentence = "Data Science is the sexiest job of the 21st century"
+second_sentence = "machine learning is the key for data science"
+
+#split so each word have their own string
+
+first_sentence = first_sentence.split(" ")
+second_sentence = second_sentence.split(" ")
+
+#join them to remove common duplicate words 
+
+total= set(first_sentence).union(set(second_sentence))
+print(total)
+
+
+# In[26]:
+
+
+wordDictA = dict.fromkeys(total, 0)
+wordDictB = dict.fromkeys(total, 0)
+
+for word in first_sentence:
+    wordDictA[word]+=1
+
+for word in second_sentence:
+    wordDictB[word]+=1
+    
+pd.DataFrame([wordDictA, wordDictB])
+
+
+# In[33]:
+
+
+def computeTF(wordDict, doc):
+    tfDict = {}
+    corpusCount = len(doc)
+    for word, count in wordDict.items():
+        tfDict[word] = count/float(corpusCount)
+    return(tfDict)
+
+#running our sentences through the tf 
+
+function:tfFirst = computeTF(wordDictA, first_sentence)
+tfSecond = computeTF(wordDictB, second_sentence)
+
+#Converting to dataframe for visualization
+
+tf = pd.DataFrame([tfFirst,tfSecond])
+tf
+
+
+# In[30]:
+
+
+import nltk
+nltk.download('stopwords')
+
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+filtered_sentence = [w for w in wordDictA if not w in stop_words]
+print(filtered_sentence)
+
+
+# In[40]:
+
+
+def computeIDF(docList):
+    idfDict = {}
+    N = len(docList)
+    
+    idfDict = dict.fromkeys(docList[0].keys(), 0)
+    for word, val in idfDict.items():
+        idfDict[word] = math.log10(N / (float(val) + 1))
+    return(idfDict)
+
+#inputing our sentences in the log file
+
+idfs = computeIDF([wordDictA, wordDictB])
+
+
+# In[39]:
+
+
+def computeTFIDF(tfBow, idfs):
+    tfidf = {}
+    for word, val in tfBow.items():
+        tfidf[word] = val*idfs[word]
+    return(tfidf)
+
+#running our two sentences through the IDF:
+
+idfFirst = computeTFIDF(tfFirst, idfs)
+idfSecond = computeTFIDF(tfSecond, idfs)
+
+#putting it in a dataframe
+
+idf= pd.DataFrame([idfFirst, idfSecond])
+print(idf)
+
+
+#first step is to import the library
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+#for the sentence, make sure all words are lowercase or you will run #into error. for simplicity, I just made the same sentence all #lowercase
+
+firstV= "Data Science is the sexiest job of the 21st century"
+secondV= "machine learning is the key for data science"
+
+#calling the TfidfVectorizer
+
+vectorize= TfidfVectorizer()
+
+#fitting the model and passing our sentences right away:
+
+response= vectorize.fit_transform([firstV, secondV])
+print(response)
+
+/*
+/*
+Certainly! Here's an explanation for each line of code:
+
+1. `get_ipython().system('pip install nltk')`: This line uses the `pip` package installer to install the NLTK library.
+
+2. `import nltk`: This line imports the NLTK library.
+
+3. `nltk.download('punkt')`: This line downloads the Punkt tokenizer data from NLTK, which is used for tokenization.
+
+4. `from nltk.tokenize import sent_tokenize`: This line imports the `sent_tokenize` function from NLTK's `tokenize` module, which is used for sentence tokenization.
+
+5. `text="""Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard"""`: This line defines a multi-line string `text` containing some sample text for tokenization.
+
+6. `tokenized_text=sent_tokenize(text)`: This line uses the `sent_tokenize` function to tokenize the text into sentences and stores the result in the `tokenized_text` variable.
+
+7. `print(tokenized_text)`: This line prints the tokenized sentences.
+
+8. `from nltk.tokenize import word_tokenize`: This line imports the `word_tokenize` function from NLTK's `tokenize` module, which is used for word tokenization.
+
+9. `tokenized_word=word_tokenize(text)`: This line uses the `word_tokenize` function to tokenize the text into words and stores the result in the `tokenized_word` variable.
+
+10. `print(tokenized_word)`: This line prints the tokenized words.
+
+11. `from nltk.probability import FreqDist`: This line imports the `FreqDist` class from NLTK's `probability` module, which is used for frequency distribution analysis.
+
+12. `fdist = FreqDist(tokenized_word)`: This line creates a `FreqDist` object `fdist` from the tokenized words.
+
+13. `print(fdist)`: This line prints the frequency distribution.
+
+14. `fdist.most_common(2)`: This line prints the most common words and their frequencies.
+
+15. `import matplotlib.pyplot as plt`: This line imports the `pyplot` module from the `matplotlib` library, which is used for plotting.
+
+16. `fdist.plot(30,cumulative=False)`: This line plots the frequency distribution, showing the top 30 words.
+
+17. `plt.show()`: This line displays the plot.
+
+18. `tokens=nltk.word_tokenize(sent)`: This line tokenizes the sentence into words using the `word_tokenize` function.
+
+19. `print(tokens)`: This line prints the tokenized words.
+
+20. `nltk.download('averaged_perceptron_tagger')`: This line downloads the averaged_perceptron_tagger data from NLTK, which is used for part-of-speech tagging.
+
+21. `nltk.pos_tag(tokens)`: This line performs part-of-speech tagging on the tokens using the `pos_tag` function.
+
+22. `nltk.download('stopwords')`: This line downloads the stopwords data from NLTK, which are common words that can be excluded from text analysis.
+
+23. `stop_words = set(stopwords.words("english"))`: This line creates a set of stopwords for the English language using the `stopwords.words` function.
+
+24. `print(stop_words)`: This line prints the set of stopwords.
+
+25. `from nltk.corpus import stopwords`: This line imports the `stopwords` corpus from NLTK.
+
+26. `from nltk.tokenize import word_tokenize`: This line imports the `word_tokenize` function from NLTK's `tokenize` module.
+
+27. `example_sent = "Hello
+
+ Mr. Smith, how are you doing today? The weather is great, and city is awesome. The sky is pinkish-blue. You shouldn't eat cardboard"`: This line defines a string `example_sent` containing some sample text for stopwords removal.
+
+28. `stop_words = set(stopwords.words('english'))`: This line creates a set of stopwords for the English language.
+
+29. `word_tokens = word_tokenize(example_sent)`: This line tokenizes the example sentence into words.
+
+30. `filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]`: This line uses a list comprehension to filter out the stopwords from the tokenized words, ignoring case.
+
+31. `filtered_sentence = []`: This line initializes an empty list to store the filtered words.
+
+32. `for w in word_tokens:`: This line starts a loop to iterate over each word in the tokenized words.
+
+33. `if w not in stop_words:`: This line checks if the word is not a stopword.
+
+34. `filtered_sentence.append(w)`: This line adds the word to the `filtered_sentence` list.
+
+35. `print(word_tokens)`: This line prints the tokenized words.
+
+36. `print(filtered_sentence)`: This line prints the filtered words after stopwords removal.
+
+37. `from nltk.corpus import stopwords`: This line imports the `stopwords` corpus from NLTK.
+
+38. `from nltk.tokenize import word_tokenize`: This line imports the `word_tokenize` function from NLTK's `tokenize` module.
+
+39. `text="Hello Mr. Smith, how are you doing today?"`: This line defines a string `text` containing a sample sentence.
+
+40. `stop_words = set(stopwords.words("english"))`: This line creates a set of stopwords for the English language.
+
+41. `tokenized_text=word_tokenize(text)`: This line tokenizes the text into words.
+
+42. `filtered_sent=[]`: This line initializes an empty list to store the filtered words.
+
+43. `for w in tokenized_text:`: This line starts a loop to iterate over each word in the tokenized words.
+
+44. `if w not in stop_words:`: This line checks if the word is not a stopword.
+
+45. `filtered_sent.append(w)`: This line adds the word to the `filtered_sent` list.
+
+46. `print("Tokenized Sentence:",tokenized_text)`: This line prints the tokenized sentence.
+
+47. `print("Filterd Sentence  :",filtered_sent)`: This line prints the filtered sentence after stopwords removal.
+
+48. `removed_words = []`: This line initializes an empty list to store the removed stopwords.
+
+49. `for w in tokenized_text:`: This line starts a loop to iterate over each word in the tokenized words.
+
+50. `if w in stop_words:`: This line checks if the word is a stopword.
+
+51. `removed_words.append(w)`: This line adds the word to the `removed_words` list.
+
+52. `print("Filterd Sentence  :",removed_words)`: This line prints the removed stopwords.
+
+53. `from nltk.stem import PorterStemmer`: This line imports the `PorterStemmer` class from NLTK's `stem` module, which is used for stemming.
+
+54. `from nltk.tokenize import sent_tokenize, word_tokenize`: This line imports the `sent_tokenize` and `word_tokenize` functions from NLTK's `tokenize` module.
+
+55. `ps = PorterStemmer()`: This line creates an instance of the `PorterStemmer` class.
+
+56. `stemmed_words=[]`: This line initializes an empty list to store the stemmed words.
+
+57
+
+. `for w in filtered_sent:`: This line starts a loop to iterate over each word in the filtered words.
+
+58. `stemmed_words.append(ps.stem(w))`: This line applies stemming to each word using the `stem` method of the `PorterStemmer` class and adds the stemmed word to the `stemmed_words` list.
+
+59. `print("Filtered Sentence:",filtered_sent)`: This line prints the filtered sentence.
+
+60. `print("Stemmed Sentence:",stemmed_words)`: This line prints the stemmed sentence.
+
+61. `import nltk`: This line imports the NLTK library.
+
+62. `nltk.download('wordnet')`: This line downloads the WordNet data from NLTK, which is used for lemmatization.
+
+63. `import nltk`: This line imports the NLTK library.
+
+64. `nltk.download('omw-1.4')`: This line downloads the Open Multilingual WordNet (OMW) data from NLTK.
+
+65. `from nltk.stem.wordnet import WordNetLemmatizer`: This line imports the `WordNetLemmatizer` class from NLTK's `wordnet` module, which is used for lemmatization.
+
+66. `lem = WordNetLemmatizer()`: This line creates an instance of the `WordNetLemmatizer` class.
+
+67. `from nltk.stem.porter import PorterStemmer`: This line imports the `PorterStemmer` class from NLTK's `stem` module, which is used for stemming.
+
+68. `stem = PorterStemmer()`: This line creates an instance of the `PorterStemmer` class.
+
+69. `word = "flying"`: This line defines a string `word` to be lemmatized and stemmed.
+
+70. `print("Lemmatized Word:",lem.lemmatize(word,"v"))`: This line lemmatizes the word using the `lemmatize` method of the `WordNetLemmatizer` class and prints the lemmatized word.
+
+71. `print("Stemmed Word:",stem.stem(word))`: This line stems the word using the `stem` method of the `PorterStemmer` class and prints the stemmed word.
+
+72. `import pandas as pd`: This line imports the `pandas` library and assigns it the alias `pd`.
+
+73. `import sklearn as sk`: This line imports the `sklearn` library and assigns it the alias `sk`.
+
+74. `import math`: This line imports the `math` module.
+
+75. `first_sentence = "Data Science is the sexiest job of the 21st century"`: This line defines a string `first_sentence` containing the first sentence for TF-IDF analysis.
+
+76. `second_sentence = "machine learning is the key for data science"`: This line defines a string `second_sentence` containing the second sentence for TF-IDF analysis.
+
+77. `first_sentence = first_sentence.split(" ")`: This line splits the `first_sentence` string into a list of words based on whitespace.
+
+78. `second_sentence = second_sentence.split(" ")`: This line splits the `second_sentence` string into a list of words based on whitespace.
+
+79. `total= set(first_sentence).union(set(second_sentence))`: This line creates a set `total` that contains all unique words from both sentences.
+
+80. `print(total)`: This line prints the set of unique words.
+
+81. `wordDictA = dict.fromkeys(total, 0)`: This line creates a dictionary `wordDictA` with keys as the words from `total` set and initial values set
+
+ to 0.
+
+82. `wordDictB = dict.fromkeys(total, 0)`: This line creates a dictionary `wordDictB` with keys as the words from `total` set and initial values set to 0.
+
+83. `for word in first_sentence:`: This line starts a loop to iterate over each word in the `first_sentence` list.
+
+84. `wordDictA[word]+=1`: This line increments the count of the word in `wordDictA` dictionary.
+
+85. `for word in second_sentence:`: This line starts a loop to iterate over each word in the `second_sentence` list.
+
+86. `wordDictB[word]+=1`: This line increments the count of the word in `wordDictB` dictionary.
+
+87. `def computeTF(wordDict, bow):`: This line defines a function `computeTF` that calculates the term frequency (TF) of words in a bag-of-words (bow).
+
+88. `def computeIDF(docList):`: This line defines a function `computeIDF` that calculates the inverse document frequency (IDF) of words in a list of documents (docList).
+
+89. `def computeTFIDF(tfBow, idfs):`: This line defines a function `computeTFIDF` that calculates the TF-IDF scores given the term frequency (TF) and inverse document frequency (IDF).
+
+90. `tfBowA = computeTF(wordDictA, first_sentence)`: This line calculates the TF for `first_sentence` using the `computeTF` function and assigns it to `tfBowA`.
+
+91. `tfBowB = computeTF(wordDictB, second_sentence)`: This line calculates the TF for `second_sentence` using the `computeTF` function and assigns it to `tfBowB`.
+
+92. `idfs = computeIDF([wordDictA, wordDictB])`: This line calculates the IDF using the `computeIDF` function and assigns it to `idfs`.
+
+93. `tfidfBowA = computeTFIDF(tfBowA, idfs)`: This line calculates the TF-IDF scores for `first_sentence` using the `computeTFIDF` function and assigns it to `tfidfBowA`.
+
+94. `tfidfBowB = computeTFIDF(tfBowB, idfs)`: This line calculates the TF-IDF scores for `second_sentence` using the `computeTFIDF` function and assigns it to `tfidfBowB`.
+
+95. `df = pd.DataFrame([tfidfBowA, tfidfBowB])`: This line creates a pandas DataFrame `df` from the TF-IDF scores.
+
+96. `print(df)`: This line prints the DataFrame.
+
+These lines of code demonstrate various functionalities of the NLTK library, such as tokenization, stemming, lemmatization, stopwords removal, part-of-speech tagging, and TF-IDF analysis.
+
+*/
+
+*/

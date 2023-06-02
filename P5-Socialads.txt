@@ -1,0 +1,137 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from math import exp
+
+data = pd.read_csv("Social_Network_Ads.csv")
+data
+data.describe()
+
+plt.scatter(data['Age'], data['Purchased'])
+plt.xlabel("age")
+plt.ylabel("purchased")
+plt.show()
+
+# Divide the data to training set and test set
+X_train, X_test, Y_train, Y_test = train_test_split(data['Age'], data['Purchased'],test_size=0.20)
+
+from sklearn.linear_model import LogisticRegression
+
+# Create an instance and fit the model
+model = LogisticRegression()
+model.fit(X_train.values.reshape(-1,1),Y_train.values.reshape(-1,1).ravel())
+
+# Making predictions
+y_pred_sk = model.predict(X_test.values.reshape(-1,1))
+plt.clf()
+plt.scatter(X_test,Y_test)
+plt.scatter(X_test,y_pred_sk,c="red")
+
+plt.xlabel("age")
+plt.ylabel("purchased")
+plt.show()
+# Accuracy
+
+print(f"Accuracy = {model.score(X_test.values.reshape(-1,1),Y_test.values.reshape(-1,1))}")
+
+from sklearn.metrics import confusion_matrix
+
+# extracting true_positives, false_positives, true_negatives, false_negatives
+tn, fp, fn, tp = confusion_matrix(Y_test, y_pred_sk).ravel()
+print("True Negatives: ",tn)
+print("False Positives: ",fp)
+print("False Negatives: ",fn)
+print("True Positives: ",tp)
+
+Accuracy = (tn+tp)*100/(tp+tn+fp+fn)
+print("Accuracy {:0.2f}%:".format(Accuracy))
+
+Precision = tp/(tp+fp)
+print("Precision {:0.2f}".format(Precision))
+
+Recall = tp/(tp+fn)
+print("Recall {:0.2f}".format(Recall))
+
+err = (fp + fn)/(tp + tn + fn + fp)
+print("Error rate {:0.2f}".format(err))
+
+/*
+Sure! Here's an explanation for each line of code:
+
+1. `import numpy as np`: This line imports the NumPy library and assigns it the alias 'np'.
+
+2. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+3. `import matplotlib.pyplot as plt`: This line imports the pyplot module from the matplotlib library and assigns it the alias 'plt'.
+
+4. `from sklearn.model_selection import train_test_split`: This line imports the train_test_split function from the model_selection module in scikit-learn.
+
+5. `from math import exp`: This line imports the exp function from the math module.
+
+6. `data = pd.read_csv("Social_Network_Ads.csv")`: This line reads a CSV file called "Social_Network_Ads.csv" and creates a DataFrame called `data` to store the data.
+
+7. `data`: This line displays the content of the `data` DataFrame.
+
+8. `data.describe()`: This line provides summary statistics (count, mean, min, max, quartiles) for the numerical columns of the `data` DataFrame.
+
+9. `plt.scatter(data['Age'], data['Purchased'])`: This line creates a scatter plot with 'Age' on the x-axis and 'Purchased' on the y-axis.
+
+10. `plt.xlabel("age")`: This line sets the label for the x-axis.
+
+11. `plt.ylabel("purchased")`: This line sets the label for the y-axis.
+
+12. `plt.show()`: This line displays the scatter plot.
+
+13. `X_train, X_test, Y_train, Y_test = train_test_split(data['Age'], data['Purchased'],test_size=0.20)`: This line splits the data into training and testing sets, where 80% of the data is used for training (`X_train` and `Y_train`) and 20% is used for testing (`X_test` and `Y_test`).
+
+14. `from sklearn.linear_model import LogisticRegression`: This line imports the LogisticRegression class from scikit-learn.
+
+15. `model = LogisticRegression()`: This line creates an instance of the LogisticRegression model.
+
+16. `model.fit(X_train.values.reshape(-1,1),Y_train.values.reshape(-1,1).ravel())`: This line fits the logistic regression model to the training data.
+
+17. `y_pred_sk = model.predict(X_test.values.reshape(-1,1))`: This line uses the trained model to make predictions on the testing data.
+
+18. The following lines create a scatter plot to visualize the actual test labels (`X_test` and `Y_test`) and the predicted labels (`X_test` and `y_pred_sk`).
+
+19. `plt.xlabel("age")`: This line sets the label for the x-axis.
+
+20. `plt.ylabel("purchased")`: This line sets the label for the y-axis.
+
+21. `plt.show()`: This line displays the scatter plot.
+
+22. `print(f"Accuracy = {model.score(X_test.values.reshape(-1,1),Y_test.values.reshape(-1,1))}")`: This line calculates and prints the accuracy of the logistic regression model on the testing data.
+
+23. `from sklearn.metrics import confusion_matrix`: This line imports the confusion_matrix function from scikit-learn.
+
+24. `tn, fp, fn, tp = confusion_matrix(Y_test, y_pred_sk).ravel()`: This line calculates the values for true negatives, false positives, false negatives, and true positives from the confusion matrix.
+
+25. `print("True Negatives: ",tn)`: This line prints the number of true negatives.
+
+26. `print("False Positives: ",fp
+
+)`: This line prints the number of false positives.
+
+27. `print("False Negatives: ",fn)`: This line prints the number of false negatives.
+
+28. `print("True Positives: ",tp)`: This line prints the number of true positives.
+
+29. `Accuracy = (tn+tp)*100/(tp+tn+fp+fn)`: This line calculates the accuracy as a percentage.
+
+30. `print("Accuracy {:0.2f}%:".format(Accuracy))`: This line prints the accuracy in a formatted string.
+
+31. `Precision = tp/(tp+fp)`: This line calculates the precision.
+
+32. `print("Precision {:0.2f}".format(Precision))`: This line prints the precision in a formatted string.
+
+33. `Recall = tp/(tp+fn)`: This line calculates the recall.
+
+34. `print("Recall {:0.2f}".format(Recall))`: This line prints the recall in a formatted string.
+
+35. `err = (fp + fn)/(tp + tn + fn + fp)`: This line calculates the error rate.
+
+36. `print("Error rate {:0.2f}".format(err))`: This line prints the error rate in a formatted string.
+
+Note: Some lines in the code refer to external libraries and functions, such as Pandas, Matplotlib, scikit-learn, etc., which are imported from the respective libraries.
+*/

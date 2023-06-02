@@ -1,0 +1,65 @@
+import pandas as pd
+
+col_names = ['Sepal_Length','Sepal_Width','Petal_Length','Petal_Width','Species']
+dataset = pd.read_csv('iris.data',names=col_names)
+dataset
+dataset.isnull()
+dataset.describe()
+dataset.describe(include='all')
+dataset.dtypes
+dataset.shape
+dataset['Sepal_Length'] = dataset['Sepal_Length'].astype("object")
+dataset.dtypes
+dataset['Convert 1'] = pd.factorize(dataset.Species)[0]
+dataset
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+dataset['Convert 2'] = le.fit_transform(dataset.Species)
+dataset
+iris=dataset
+one_hot_data = pd.get_dummies(iris, prefix="Sepal_Width)",
+columns=['Sepal_Width'], drop_first=False)
+print(one_hot_data)
+
+/*Sure! Here's the meaning of each line of code:
+
+1. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+2. `col_names = ['Sepal_Length','Sepal_Width','Petal_Length','Petal_Width','Species']`: This line defines a list called `col_names` containing the column names for the dataset.
+
+3. `dataset = pd.read_csv('iris.data',names=col_names)`: This line reads a CSV file called 'iris.data' and creates a DataFrame called `dataset` using the specified column names.
+
+4. `dataset`: This line simply displays the content of the `dataset` DataFrame.
+
+5. `dataset.isnull()`: This line checks for missing values in the `dataset` DataFrame and returns a DataFrame of the same shape, where each cell contains True if the corresponding value is null and False otherwise.
+
+6. `dataset.describe()`: This line provides descriptive statistics (count, mean, standard deviation, minimum, quartiles, maximum) for each numerical column in the `dataset` DataFrame.
+
+7. `dataset.describe(include='all')`: This line provides descriptive statistics for both numerical and categorical columns in the `dataset` DataFrame.
+
+8. `dataset.dtypes`: This line displays the data types of each column in the `dataset` DataFrame.
+
+9. `dataset.shape`: This line displays the number of rows and columns in the `dataset` DataFrame.
+
+10. `dataset['Sepal_Length'] = dataset['Sepal_Length'].astype("object")`: This line converts the data type of the 'Sepal_Length' column in the `dataset` DataFrame to 'object' (a generic data type in Pandas representing strings and other types).
+
+11. `dataset.dtypes`: This line displays the updated data types of each column in the `dataset` DataFrame.
+
+12. `dataset['Convert 1'] = pd.factorize(dataset.Species)[0]`: This line creates a new column called 'Convert 1' in the `dataset` DataFrame. It assigns a unique numeric code to each unique value in the 'Species' column using the `factorize` function from Pandas.
+
+13. `dataset`: This line displays the `dataset` DataFrame with the newly added 'Convert 1' column.
+
+14. `from sklearn.preprocessing import LabelEncoder`: This line imports the `LabelEncoder` class from the `sklearn.preprocessing` module.
+
+15. `le = LabelEncoder()`: This line creates an instance of the `LabelEncoder` class and assigns it to the variable `le`.
+
+16. `dataset['Convert 2'] = le.fit_transform(dataset.Species)`: This line creates another new column called 'Convert 2' in the `dataset` DataFrame. It encodes the values in the 'Species' column using the `fit_transform` method of the `LabelEncoder` object `le`.
+
+17. `dataset`: This line displays the `dataset` DataFrame with the newly added 'Convert 2' column.
+
+18. `iris=dataset`: This line assigns the `dataset` DataFrame to a new variable called `iris`.
+
+19. `one_hot_data = pd.get_dummies(iris, prefix="Sepal_Width)", columns=['Sepal_Width'], drop_first=False)`: This line performs one-hot encoding on the `iris` DataFrame. It creates dummy variables for the 'Sepal_Width' column, replacing it with multiple columns representing different categories. The generated column names will have the prefix "Sepal_Width)".
+
+20. `print(one_hot_data)`: This line displays the `one_hot_data` DataFrame, which contains the result of the one-hot encoding operation.
+*/

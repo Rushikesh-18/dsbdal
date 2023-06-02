@@ -1,0 +1,171 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import random
+import seaborn as sns
+
+%matplotlib inline
+
+from sklearn import datasets
+df = pd.read_csv("Boston.csv")
+df.keys()
+
+data = df
+data
+random_values = [random.randint(20000, 400000) for _ in range(len(df))]
+df['Prices'] = random_values
+df
+
+data=df
+data.describe()
+
+data.info()
+
+data.isnull().sum()
+
+sns.set(rc={'figure.figsize':(11.7,8.27)})
+sns.distplot(data['Prices'], bins=30)
+plt.show()
+
+correlationMatrix = data.corr().round(2)
+sns.heatmap(data=correlationMatrix, annot=True)
+
+plt.figure(figsize=(20, 5))
+ 
+features = ['lstat', 'rm']
+target = data['Prices']
+ 
+for i, col in enumerate(features):
+    plt.subplot(1, len(features) , i+1)
+    x = data[col]
+    y = target
+    plt.scatter(x, y, marker='o')
+    plt.title(col)
+    plt.xlabel(col)
+    plt.ylabel('MEDV')
+
+
+import numpy as np
+X = pd.DataFrame(np.c_[data['lstat'], data['rm']], columns = ['lstat','rm'])
+Y = data['Prices']
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state=5)
+print(X_train.shape)
+print(X_test.shape)
+print(Y_train.shape)
+print(Y_test.shape)
+
+from sklearn.linear_model import LinearRegression
+ 
+model = LinearRegression()
+model.fit(X_train, Y_train) 
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+
+y_pred = model.predict(X_test)
+rmse = (np.sqrt(mean_squared_error(Y_test, y_pred)))
+r2 = r2_score(Y_test, y_pred)
+
+print("The model performance for testing set")
+print("---------------------------------------")
+print('RMSE is : {}'.format(rmse))
+print("--------------------------------------")
+print('R2 score is : {}'.format(r2))
+print("--------------------------------------")
+
+
+sample = [[6.89,9.939]]
+price = model.predict(sample)
+
+print("Predicting selling price for house : ${:,.2f}".format(price[0]))
+
+
+
+/*
+Sure! Here's an explanation for each line of code:
+
+1. `import matplotlib.pyplot as plt`: This line imports the pyplot module from the matplotlib library and assigns it the alias 'plt'.
+
+2. `import pandas as pd`: This line imports the Pandas library and assigns it the alias 'pd'.
+
+3. `import seaborn as sns`: This line imports the seaborn library and assigns it the alias 'sns'.
+
+4. `%matplotlib inline`: This line is a Jupyter Notebook magic command that enables the inline plotting of graphs in the notebook.
+
+5. `from sklearn import datasets`: This line imports the datasets module from the scikit-learn library.
+
+6. `df = pd.read_csv("Boston.csv")`: This line reads a CSV file called "Boston.csv" and creates a DataFrame called `df` to store the data.
+
+7. `df.keys()`: This line returns the column names (keys) of the `df` DataFrame.
+
+8. `data = df`: This line assigns the `df` DataFrame to the `data` variable.
+
+9. `data`: This line displays the content of the `data` DataFrame.
+
+10. `random_values = [random.randint(20000, 400000) for _ in range(len(df))]`: This line generates a list of random integer values between 20000 and 400000 with the same length as the `df` DataFrame.
+
+11. `df['Prices'] = random_values`: This line adds a new column called 'Prices' to the `df` DataFrame and assigns the random values to it.
+
+12. `df`: This line displays the updated `df` DataFrame.
+
+13. `data = df`: This line assigns the `df` DataFrame to the `data` variable.
+
+14. `data.describe()`: This line provides summary statistics (count, mean, min, max, quartiles) for the numerical columns of the `data` DataFrame.
+
+15. `data.info()`: This line provides information about the data types and the presence of missing values in the `data` DataFrame.
+
+16. `data.isnull().sum()`: This line calculates the number of missing values in each column of the `data` DataFrame.
+
+17. `sns.set(rc={'figure.figsize':(11.7,8.27)})`: This line sets the figure size for the seaborn plots.
+
+18. `sns.distplot(data['Prices'], bins=30)`: This line creates a histogram (distribution plot) of the 'Prices' column in the `data` DataFrame.
+
+19. `plt.show()`: This line displays the histogram plot.
+
+20. `correlationMatrix = data.corr().round(2)`: This line calculates the correlation coefficients between the columns of the `data` DataFrame and rounds them to 2 decimal places.
+
+21. `sns.heatmap(data=correlationMatrix, annot=True)`: This line creates a heatmap plot of the correlation matrix.
+
+22. `plt.figure(figsize=(20, 5))`: This line creates a new figure with a specified size for the scatter plots.
+
+23. `features = ['lstat', 'rm']`: This line defines a list of feature column names.
+
+24. `target = data['Prices']`: This line assigns the 'Prices' column of the `data` DataFrame to the `target` variable.
+
+25. The following lines (`for` loop) create scatter plots for each feature column in the `features` list, with the 'Prices' column as the target variable.
+
+26. `X = pd.DataFrame(np.c_[data['lstat'], data['rm']], columns = ['lstat','rm'])`: This line creates a new DataFrame `X` with the 'lstat' and 'rm' columns from the `data`
+
+ DataFrame.
+
+27. `Y = data['Prices']`: This line assigns the 'Prices' column of the `data` DataFrame to the `Y` variable.
+
+28. `X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state=5)`: This line splits the `X` and `Y` data into training and testing sets using a test size of 0.2 (20%) and a random seed of 5.
+
+29. The following lines display the shape (dimensions) of the training and testing sets.
+
+30. `model = LinearRegression()`: This line creates a LinearRegression model object.
+
+31. `model.fit(X_train, Y_train)`: This line fits the LinearRegression model to the training data.
+
+32. `y_pred = model.predict(X_test)`: This line uses the trained model to make predictions on the testing data.
+
+33. `rmse = (np.sqrt(mean_squared_error(Y_test, y_pred)))`: This line calculates the root mean squared error (RMSE) between the actual prices (Y_test) and the predicted prices (y_pred).
+
+34. `r2 = r2_score(Y_test, y_pred)`: This line calculates the R-squared score between the actual prices (Y_test) and the predicted prices (y_pred).
+
+35. The following lines display the model performance metrics (RMSE and R2 score).
+
+36. `sample = [[6.89,9.939]]`: This line creates a sample data point with 'lstat' and 'rm' values.
+
+37. `price = model.predict(sample)`: This line uses the trained model to predict the price for the given sample data.
+
+38. The following line displays the predicted selling price for the sample house.
+
+Note: Some lines in the code refer to external libraries and functions, such as random, LinearRegression, mean_squared_error, r2_score, etc., which are imported from the respective libraries.
+*/
+
+
+

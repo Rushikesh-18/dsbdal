@@ -1,0 +1,36 @@
+
+import pandas as pd
+import numpy as numpy
+import matplotlib.pyplot as pyplot
+import seaborn as sns
+dataset = pd.read_csv('titanic.csv')
+dataset.head()
+# The Dist Plot
+sns.distplot(dataset['fare'],kde=False,bins=10)
+# The Joint Plot
+sns.jointplot(x='age', y='fare', data=dataset, kind='hex')
+#The Rug Plot
+sns.rugplot(dataset['fare'])
+pyplot.show()
+
+/*
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`.
+
+2. `import numpy as numpy`: This line imports the numpy library and assigns it the alias `numpy`.
+
+3. `import matplotlib.pyplot as pyplot`: This line imports the pyplot module from the matplotlib library and assigns it the alias `pyplot`.
+
+4. `import seaborn as sns`: This line imports the seaborn library and assigns it the alias `sns`.
+
+5. `dataset = pd.read_csv('titanic.csv')`: This line reads the 'titanic.csv' file using the `read_csv` function from pandas and assigns the resulting DataFrame to the variable `dataset`.
+
+6. `dataset.head()`: This line displays the first few rows of the dataset to give a glimpse of its contents.
+
+7. `sns.distplot(dataset['fare'],kde=False,bins=10)`: This line creates a histogram using the `distplot` function from seaborn. It plots the distribution of the 'fare' column from the dataset, with the `kde` parameter set to `False` to remove the kernel density estimate line, and the `bins` parameter set to `10` to specify the number of bins in the histogram.
+
+8. `sns.jointplot(x='age', y='fare', data=dataset, kind='hex')`: This line creates a joint plot using the `jointplot` function from seaborn. It displays the relationship between the 'age' and 'fare' columns from the dataset. The plot type is set to 'hex' to show the density of points using hexagonal bins.
+
+9. `sns.rugplot(dataset['fare'])`: This line creates a rug plot using the `rugplot` function from seaborn. It displays the distribution of the 'fare' column by placing tick marks along the x-axis for each data point.
+
+10. `pyplot.show()`: This line displays all the plots that have been created using seaborn and matplotlib.pyplot.
+*/
